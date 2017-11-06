@@ -7,22 +7,40 @@ block content
 			hr.my-3
 			h2 Esto es un #{subtitle}
 	.container-fluid
-		.row
-			.col-md-4
-				form.form-group(method="POST",action="/users")
+		form.form-group(method="POST",action="/users")
+			.row
+				.col-md-4
+					h2 Origen:
 					label(for="host") Host
-					input.form-control(type="text",name="host")
+					input.form-control(type="text",name="host1")
 					br
 					label(for="usuario") Usuario 
-					input.form-control(type="text",name="usuario")
+					input.form-control(type="text",name="usuario1")
 					br
 					label(for="passw") Contraseña 
-					input.form-control(type="password",name="passw")
+					input.form-control(type="password",name="passw1")
 					br
 					label(for="bd") Base de Datos 
-					input.form-control(type="text",name="bd")
+					input.form-control(type="text",name="bd1")
 					br
 					label(for="puerto") Puerto
-					input.form-control(type="number",name="puerto")
+					input.form-control(type="number",name="puerto1")
 					br
 					input.btn.btn-primary(type="submit", value="Enviar")
+				.col-md-1
+				.col-md-4
+					h2 Destino:
+					label(for="host") Host
+					input.form-control(type="text",name="host2")
+					br
+					label(for="usuario") Usuario 
+					input.form-control(type="text",name="usuario2")
+					br
+					label(for="passw") Contraseña 
+					input.form-control(type="password",name="passw2")
+					br
+					label(for="bd") Base de Datos 
+					input.form-control(type="text",name="bd2")
+					br
+					label(for="puerto") Puerto
+					input.form-control(type="number",name="puerto2")
