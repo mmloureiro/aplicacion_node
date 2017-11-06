@@ -1,0 +1,28 @@
+extends layout
+
+block content
+	.jumbotron
+			h1.display-4= title
+			p.lead Welcome to #{title}
+			hr.my-3
+			h2 Esto es un #{subtitle}
+	.container-fluid
+		.row
+			.col-md-4
+				form.form-group(method="POST",action="/users")
+					label(for="host") Host
+					input.form-control(type="text",name="host")
+					br
+					label(for="usuario") Usuario 
+					input.form-control(type="text",name="usuario")
+					br
+					label(for="passw") Contraseña 
+					input.form-control(type="password",name="passw")
+					br
+					label(for="bd") Base de Datos 
+					input.form-control(type="text",name="bd")
+					br
+					label(for="puerto") Puerto
+					input.form-control(type="number",name="puerto")
+					br
+					input.btn.btn-primary(type="submit", value="Enviar")

@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	.container-fluid
+		h1 Datos del formulario
+		.col-md-3
+			ul.list-group
+				li.list-group-item El host es: #{host}
+				li.list-group-item El usurario es: #{user}
+				li.list-group-item La contraseña es: #{pass}
+				li.list-group-item La base de datos es: #{bd}
+				li.list-group-item El puerto es: #{port}
+				li.list-group-item El archivo creado es: #{archivo_sql}
