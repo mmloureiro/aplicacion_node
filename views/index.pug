@@ -5,7 +5,7 @@ block content
 			h1.display-4= title
 			p.lead Welcome to #{title}
 			hr.my-3
-			h2 Esto es un #{subtitle}
+			h2 Aplicación para el volcado de Bases de Datos
 	.container-fluid
 		form.form-group(method="POST",action="/users")
 			.row
@@ -26,7 +26,6 @@ block content
 					label(for="puerto") Puerto
 					input.form-control(type="number",name="puerto1")
 					br
-					input.btn.btn-primary(type="submit", value="Enviar")
 				.col-md-1
 				.col-md-4
 					h2 Destino:
@@ -44,3 +43,5 @@ block content
 					br
 					label(for="puerto") Puerto
 					input.form-control(type="number",name="puerto2")
+					br
+					input.btn.btn-primary(type="submit", value="Enviar")

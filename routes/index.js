@@ -5,7 +5,7 @@ const volcado = require ('../controllers/volcado.js')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Mi API' , subtitle: 'formulario'});
+  res.render('index', { title: 'Mi API' });
 });
 
 // POST
@@ -28,19 +28,18 @@ router.post('/users', function(req,res,next){
 
 	volcado.importar(host1, user1, pass1, bd1, port1, archivo_sql)
 		.then(function(){
-		volcado.mod_archivo(archivo_sql)})
+			volcado.mod_archivo(archivo_sql)})
 		.then(function(){
 			volcado.crearBD(host2, user2, pass2, port2, bd2, archivo_sql)})
-		.then(function(){		
+		.then(function(){
 			volcado.enviar(host2, user2, pass2, port2, bd2, archivo_sql)})
-		// .then(function(){
-			// volcado.borrar_archivo(archivo_sql)})
-		.then(function(response){
-			console.log("TODO ES CORRECTO",response)
+		.then(function(){
+			volcado.borrar_archivo(archivo_sql)})
+		.then(function(resolve){
+			console.log("TODO ES CORRECTO",resolve)
 		})
 		.catch(function(err){
-			console.log(err,"No se pudo completar la acción")
+			console.log("NO SE PUDO COMPLETAR LA ACCIÓN")
 		})
 })
-
 module.exports = router;

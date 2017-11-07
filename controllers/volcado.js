@@ -17,13 +17,14 @@ function importar(host, user, pass, bd, port, archivo_sql){
 	    dest: archivo_sql
 		},function(err, result){
 			if(err){
-				reject("algo falla en la importación")
+				reject("Algo falla en el origen")
 			}else{
-				resolve("todo bien en la importación")
+				resolve("Todo bien en origen")
 			}
 		})
 	})
 }
+
 // función que conecta con la BD, crea la base de datos vacía y añade las globales a sus estado original
 function crearBD(host, user, pass, port, bd, archivo_sql){
 	return new Promise(function(resolve, reject){
@@ -38,16 +39,19 @@ function crearBD(host, user, pass, port, bd, archivo_sql){
 		con.connect(function(err, data) {
 			if(err){
 				// console.error('error de conexion:' + err.stack)
-				return reject(err)
+				// evitamos que salga el error de "Unhandled promise rejection"
+				con.on('error',function(){
+				return reject(err)		
+				})
 			}else{
-				console.log('conectado con la id ' + con.threadId)
+				// console.log('conectado con la id ' + con.threadId)
 				// creamos la tabla y desactivamos la comprobación de claves foraneas
 				con.query("CREATE DATABASE " + bd + "; SET GLOBAL FOREIGN_KEY_CHECKS=0;", function(err, result){
 					if(err){
 						return reject(err)
 					}else{
 						con.end()
-						resolve(con.response)
+						resolve("siiiiiiiiiiiiiii")
 					}
 				}) 
 			}
@@ -66,10 +70,10 @@ function enviar (host, user, pass, port, bd, archivo_sql){
 	}
 	importer.config(config)
 	importer.importSQL(archivo_sql).then(function(){
-		return resolve(importer.response)
+		resolve(importer.response)
 	}).catch(function(err){
-		console.log(`error: ${err}`)
-		return reject(err)
+		// console.log(`error: ${err}`)
+		reject(err)
 	})
 	})
 }
@@ -80,7 +84,7 @@ function mod_archivo(archivo){
 			if(err){
 				reject(err)
 			}else{
-				resolve(archivo)
+				resolve("Fichero modificado")
 			}
 		})
 	})
