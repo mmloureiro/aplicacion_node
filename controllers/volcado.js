@@ -4,7 +4,9 @@ const mysql = require('mysql')
 const importer = require('node-mysql-importer')
 const fs = require('fs')
 
-// funcion para importar toda la base de datos a un archivo .sql
+// función para
+
+// funcion para conectar e importar toda la base de datos a un archivo .sql
 function importar(host, user, pass, bd, port, archivo_sql){
 	return new Promise(function(resolve, reject){
 		mysqlDump({
@@ -17,9 +19,9 @@ function importar(host, user, pass, bd, port, archivo_sql){
 	    dest: archivo_sql
 		},function(err, result){
 			if(err){
-				reject("Algo falla en el origen")
+				reject("No se puede conectar con la base de datos de origen " + err)
 			}else{
-				resolve("Todo bien en origen")
+				resolve("Conexión realizada a la base de datos de origen")
 			}
 		})
 	})
@@ -27,7 +29,6 @@ function importar(host, user, pass, bd, port, archivo_sql){
 
 // función que conecta con la BD, crea la base de datos vacía y añade las globales a sus estado original
 function crearBD(host, user, pass, port, bd, archivo_sql){
-	return new Promise(function(resolve, reject){
 		var config = {
 			host: host,
 			user: user,
@@ -36,13 +37,14 @@ function crearBD(host, user, pass, port, bd, archivo_sql){
 			multipleStatements: true
 		}
 		var con = mysql.createConnection(config)
-		con.connect(function(err, data) {
-			if(err){
+			return new Promise(function(resolve, reject){
+				con.connect(function(err, data) {
+					if(err){
 				// console.error('error de conexion:' + err.stack)
 				// evitamos que salga el error de "Unhandled promise rejection"
-				con.on('error',function(){
-				return reject(err)		
-				})
+				// con.on('error',function(){
+						reject("No se pudo conectar con la base de datos de destino " + err)		
+				// })
 			}else{
 				// console.log('conectado con la id ' + con.threadId)
 				// creamos la tabla y desactivamos la comprobación de claves foraneas
@@ -51,7 +53,7 @@ function crearBD(host, user, pass, port, bd, archivo_sql){
 						return reject(err)
 					}else{
 						con.end()
-						resolve("siiiiiiiiiiiiiii")
+						resolve("Conectado con la base de datos de destino")
 					}
 				}) 
 			}
@@ -60,7 +62,6 @@ function crearBD(host, user, pass, port, bd, archivo_sql){
 }
 
 function enviar (host, user, pass, port, bd, archivo_sql){
-	return new Promise(function(resolve,reject){	
 	config = {
 		host: host,
 		user: user,
@@ -69,13 +70,15 @@ function enviar (host, user, pass, port, bd, archivo_sql){
 		database: bd
 	}
 	importer.config(config)
+	
+	// return new Promise(function(resolve,reject){	
 	importer.importSQL(archivo_sql).then(function(){
 		resolve(importer.response)
 	}).catch(function(err){
-		// console.log(`error: ${err}`)
+		console.log(`error: ${err}`)
 		reject(err)
 	})
-	})
+	// })
 }
 // añadimos la función global mysql de comprobar claves foraneas
 function mod_archivo(archivo){
@@ -99,7 +102,7 @@ function nombre_archivo(){
 }
 // borrado del archivo .sql
 function borrar_archivo(archivo){
-	new Promise(function(resolve, reject){
+	return new Promise(function(resolve, reject){
 		fs.unlink (archivo, function(err){
 			if (err){
 				reject(err)
