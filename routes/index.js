@@ -36,21 +36,34 @@ router.post('/users', function(req,res,next){
 		// creamos el nombre del archivo que vamos a usar para guardar los datos de la BD
 			var archivo_sql = './public/sql/' + host1 + '_' + bd1 + '_' + volcado.nombre_archivo()
 			console.log(archivo_sql)
-
-			Promise.all([volcado.importar(host1, user1, pass1, bd1, port1, archivo_sql), volcado.mod_archivo(archivo_sql), volcado.crearBD(host2, user2, pass2, port2, bd2, archivo_sql), volcado.enviar(host2, user2, pass2, port2, bd2, archivo_sql), volcado.borrar_archivo(archivo_sql)])
-				// .then(function(){
-					// volcado.enviar(host2, user2, pass2, port2, bd2, archivo_sql)})
-				// .then(function(){
-					// })
+			
+			Promise.all([volcado.importar(host1, user1, pass1, bd1, port1, archivo_sql), volcado.mod_archivo(archivo_sql), volcado.crearBD(host2, user2, pass2, port2, bd2, archivo_sql)])
 				.then(function(resolve){
 					res.render('users', {error: 0, host: host1, user: user1, pass: pass1, bd: bd1, port: port1, archivo_sql: archivo_sql})
-					console.log("TODO ES CORRECTO",resolve)
+					console.log("TODO ES CORRECTO", resolve)
 				})
 				.catch(function(err){
 					// Enviamos el código de error y el tipo de error correspondiente
 					res.render('users', {error: 2, mensaje: err})
 					console.log("NO SE PUDO COMPLETAR LA ACCIÓN")
 				})
+
+// Importa los datos correctamente, pero no maneja adecuadamente los errores
+			// Promise.all([volcado.importar(host1, user1, pass1, bd1, port1, archivo_sql), volcado.mod_archivo(archivo_sql), volcado.crearBD(host2, user2, pass2, port2, bd2, archivo_sql)])
+			// 	.then(function(){
+			// 		volcado.leer_archivo(archivo_sql).then(volcado.cortar_array)
+			// 	.then(volcado.mandar_datos)})
+			// 	.then(function(){
+			// 		volcado.borrar_archivo(archivo_sql)})
+			// 	.then(function(response){
+			// 		console.log("TODO ES CORRECTO",response)
+			// 		res.render('users', {error: 0, host: host1, user: user1, pass: pass1, bd: bd1, port: port1, archivo_sql: archivo_sql})
+			// 	})
+			// 	.catch(function(err){
+			// 		console.log("NO SE PUDO COMPLETAR LA ACCIÓN", err)
+			// 		res.render('users', {error: 2, mensaje: err})
+			// 	})
+
 			}else{
 				res.render('users', {error: 1})
 			}
