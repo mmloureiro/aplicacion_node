@@ -1,5 +1,4 @@
 extends layout
-
 block content
 	.jumbotron
 			h1.display-4= title
@@ -7,7 +6,7 @@ block content
 			hr.my-3
 			h2 Aplicación para el volcado de Bases de Datos
 	.container-fluid
-		form.form-group(method="POST",action="/users")
+		form.form-group(method="POST",name= "form1", id="form1" action="/users")
 			.row
 				.col-md-4
 					h2 Origen:
@@ -26,7 +25,6 @@ block content
 					label(for="puerto") Puerto
 					input.form-control(type="number",name="puerto1")
 					br
-				.col-md-1
 				.col-md-4
 					h2 Destino:
 					label(for="host") Host
@@ -44,5 +42,12 @@ block content
 					label(for="puerto") Puerto
 					input.form-control(type="number",name="puerto2")
 					br
-					input.btn.btn-primary(type="submit", value="Enviar")
-
+					input.btn.btn-primary(type="button", id="boton", value="Enviar")
+				.col-md-4
+					h2 Si tienes un archivo .JSON		
+					input(type="file" id="file")
+	script.
+		$('#boton').on("click", envio)
+		function envio() {
+			$('#form1').submit()
+		}

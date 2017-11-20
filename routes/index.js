@@ -1,7 +1,8 @@
 var express = require('express');
 const parser = require('body-parser')
 const payloadChecker = require ('payload-validator')
-var router = express.Router();
+var router = express.Router()
+var Promise = require('bluebird')
 
 //validamos archivo json, tienen que ser tipo string ""
 const expectedPayload = {
@@ -37,33 +38,34 @@ router.post('/users', function(req,res,next){
 			var archivo_sql = './public/sql/' + host1 + '_' + bd1 + '_' + volcado.nombre_archivo()
 			console.log(archivo_sql)
 			
-			Promise.all([volcado.importar(host1, user1, pass1, bd1, port1, archivo_sql), volcado.mod_archivo(archivo_sql), volcado.crearBD(host2, user2, pass2, port2, bd2, archivo_sql)])
-				.then(function(resolve){
-					res.render('users', {error: 0, host: host1, user: user1, pass: pass1, bd: bd1, port: port1, archivo_sql: archivo_sql})
-					console.log("TODO ES CORRECTO", resolve)
-				})
-				.catch(function(err){
-					// Enviamos el código de error y el tipo de error correspondiente
-					res.render('users', {error: 2, mensaje: err})
-					console.log("NO SE PUDO COMPLETAR LA ACCIÓN")
-				})
-
-// Importa los datos correctamente, pero no maneja adecuadamente los errores
-			// Promise.all([volcado.importar(host1, user1, pass1, bd1, port1, archivo_sql), volcado.mod_archivo(archivo_sql), volcado.crearBD(host2, user2, pass2, port2, bd2, archivo_sql)])
-			// 	.then(function(){
-			// 		volcado.leer_archivo(archivo_sql).then(volcado.cortar_array)
-			// 	.then(volcado.mandar_datos)})
-			// 	.then(function(){
-			// 		volcado.borrar_archivo(archivo_sql)})
-			// 	.then(function(response){
-			// 		console.log("TODO ES CORRECTO",response)
+			// volcado.importar(host1, user1, pass1, bd1, port1, archivo_sql).then(volcado.mod_archivo(archivo_sql)).then(volcado.crearBD(host2, user2, pass2, port2, bd2, archivo_sql)).then(volcado.leer_archivo(archivo_sql)).then(volcado.cortar_array).then(volcado.mandar_datos)
+			// 	.then(function(resolve){
 			// 		res.render('users', {error: 0, host: host1, user: user1, pass: pass1, bd: bd1, port: port1, archivo_sql: archivo_sql})
+			// 		console.log("TODO ES CORRECTO", resolve)
 			// 	})
 			// 	.catch(function(err){
-			// 		console.log("NO SE PUDO COMPLETAR LA ACCIÓN", err)
+			// 		// Enviamos el código de error y el tipo de error correspondiente
 			// 		res.render('users', {error: 2, mensaje: err})
+			// 		console.log("NO SE PUDO COMPLETAR LA ACCIÓN")
 			// 	})
 
+// Importa los datos correctamente, pero no maneja adecuadamente los errores
+			Promise.all([volcado.importar(host1, user1, pass1, bd1, port1, archivo_sql), volcado.mod_archivo(archivo_sql), volcado.crearBD(host2, user2, pass2, port2, bd2, archivo_sql)])
+			.then(function(){
+				volcado.enviar(host2, user2, pass2, port2, bd2, archivo_sql)
+			})
+			.then(function(){
+				volcado.borrar_archivo(archivo_sql)
+			}) 
+			.then(function(response){
+				console.log("TODO ES CORRECTO",response)
+				res.render('users', {error: 0, host1: host1, user1: user1, bd1: bd1, port1: port1, archivo_sql: archivo_sql, host2: host2, user2: host2, bd2: bd2, port2: port2})
+			})
+			.catch(function(err){
+				console.log("NO SE PUDO COMPLETAR LA ACCIÓN", err)
+				res.render('users', {error: 2, mensaje: err})
+
+			})
 			}else{
 				res.render('users', {error: 1})
 			}

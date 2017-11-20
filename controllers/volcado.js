@@ -3,6 +3,7 @@ const mysqlDump = require('mysqldump')
 const mysql = require('mysql')
 const importer = require('node-mysql-importer')
 const fs = require('fs')
+var Promise = require('bluebird')
 var con
 
 // funcion para conectar e importar toda la base de datos a un archivo .sql
@@ -42,21 +43,19 @@ function crearBD(host, user, pass, port, bd, archivo_sql){
 				// console.error('error de conexion:' + err.stack)
 				// evitamos que salga el error de "Unhandled promise rejection"
 				// con.on('error',function(){
-						reject("No se pudo conectar con la base de datos de destino " + err)		
+						reject("No se pudo conectar con la base de datos de destino " + err)
 				// })
 			}else{
 				// console.log('conectado con la id ' + con.threadId)
 				// creamos la tabla y desactivamos la comprobación de claves foraneas
 				con.query("CREATE DATABASE " + bd + "; SET GLOBAL FOREIGN_KEY_CHECKS=0;", function(err, result){
 					if(err){
-						return reject(err)
+						reject(err)
 					}else{
 						con.end()
 						resolve("Conectado con la base de datos de destino")
 					}
-
 				})
-				} 
 			}
 		})
 	}) 
@@ -82,25 +81,25 @@ var conexion = function conectar_bd2(host, user, pass, port, bd){
 		})
 	}		
 
-// function enviar (host, user, pass, port, bd, archivo_sql){
-// 	return new Promise(function(resolve,reject){	
-// 	config = {
-// 		host: host,
-// 		user: user,
-// 		password: pass,
-// 		port: port,
-// 		database: bd
-// 	}
-// 	importer.config(config)
-// 	importer.importSQL(archivo_sql).then(function(err,data){
-// 		// console.log(importer.response)
-// 		resolve(data)
-// 	}).catch(function(err){
-// 		console.log(`error: ${err}`)
-// 		reject(err)
-// 	})
-// 	})
-// }
+function enviar (host, user, pass, port, bd, archivo_sql){
+	return new Promise(function(resolve,reject){	
+	config = {
+		host: host,
+		user: user,
+		password: pass,
+		port: port,
+		database: bd
+	}
+	importer.config(config)
+	importer.importSQL(archivo_sql).then(function(err,data){
+		console.log(importer.response)
+		resolve(data)
+	}).catch(function(err){
+		console.log(`error: ${err}`)
+		reject(err)
+	})
+	})
+}
 
 function leer_archivo(archivo){
 	return new Promise(function(resolve, reject){
@@ -132,11 +131,11 @@ function mandar_datos(arr) {
 	return new Promise(function(resolve,reject){
 		var config = {
 			// llamamos a las variables de entorno
-				host: process.env.host2,
-				user: process.env.user2,
-				password: process.env.pass2,
-				port: process.env.port2,
-				database: process.env.bd2,
+				host: "localhost",
+				user: "tokapp",
+				password: "abc123..",
+				port: "3306",
+				database: "nba123",
 				multipleStatements: true
 			}
 		var con = mysql.createConnection(config)
@@ -184,7 +183,7 @@ function borrar_archivo(archivo){
 	})
 }
 exports.importar = importar
-// exports.enviar = enviar
+exports.enviar = enviar
 exports.crearBD = crearBD
 exports.nombre_archivo = nombre_archivo
 exports.mod_archivo = mod_archivo

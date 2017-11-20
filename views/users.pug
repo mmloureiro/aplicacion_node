@@ -12,12 +12,22 @@ block content
 					.alert.alert-danger #{mensaje}
 					a(class='btn btn-primary', href='./') Volver al formulario
 			when 0
-				h1 Datos del formulario
-				.col-md-3
-					ul.list-group
-						li.list-group-item El host es: #{host}
-						li.list-group-item El usurario es: #{user}
-						li.list-group-item La contraseña es: #{pass}
-						li.list-group-item La base de datos es: #{bd}
-						li.list-group-item El puerto es: #{port}
-						li.list-group-item El archivo creado es: #{archivo_sql}
+				.col-md-6
+					.alert.alert-success La importación ha concluido con éxito!
+				.row
+					.col-md-3
+						h1 Origen:
+						ul.list-group
+							li.list-group-item #{host1}
+							li.list-group-item #{user1}
+							li.list-group-item #{bd1}
+							li.list-group-item #{port1}
+					.col-md-3
+						h1 Destino:
+						ul.list-group
+							li.list-group-item #{host2}
+							li.list-group-item #{user2}
+							li.list-group-item #{bd2}
+							li.list-group-item #{port2}
+				.row
+					div El archivo creado es: #{archivo_sql}
