@@ -18,4 +18,6 @@ Módulos usados con Node.js:
 - node-mysql-importer
 - payload-validator
 
+Para arrancar la aplicación, desde consola:
+$npm run devstart
 
