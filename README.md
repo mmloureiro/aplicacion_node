@@ -19,5 +19,4 @@ Módulos usados con Node.js:
 - payload-validator
 
 Para arrancar la aplicación, desde consola:
-$npm run devstart
-
+- $npm run devstart
